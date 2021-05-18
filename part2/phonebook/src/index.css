@@ -1,0 +1,25 @@
+.succesful {
+  font-size: 20px;
+  color: green;
+  margin-bottom: 20px;
+  margin-top: 20px;
+  border-style: solid;
+  border-radius: 25px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 5px;
+  background-color: rgb(207, 207, 207);
+}
+
+.error {
+  font-size: 20px;
+  color: red;
+  margin-bottom: 20px;
+  margin-top: 20px;
+  border-style: solid;
+  border-radius: 25px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 5px;
+  background-color: rgb(207, 207, 207);
+}
