@@ -13,6 +13,7 @@ const App = () => {
   const [newFilter, setNewFilter] = useState('')
   const [filtered, setFiltered] = useState(persons)
   const [errorMessage, seterrorMessage] = useState(null)
+  const opts = { runValidators: true }
 
   useEffect(() => {
     peopleService.getAll().then((initialObjects) => {
@@ -58,7 +59,7 @@ const App = () => {
         `${nameObject.name} is already added to  phonebook,replace the old number with a new one?`
       )
         ? peopleService
-            .update(changedNumber.id, changedNumber)
+            .update(changedNumber.id, changedNumber, opts)
             .then((response) => {
               setPersons(
                 persons.map((person) =>
@@ -69,7 +70,7 @@ const App = () => {
                 persons.map((person) =>
                   person.name !== nameObject.name ? person : response
                 )
-              )
+              ).catch((error) => console.log(error.response.data))
 
               seterrorMessage({
                 text: `Updated as ${nameObject.name} number`,
@@ -90,19 +91,31 @@ const App = () => {
             })
         : console.log('nothing has changed')
     } else {
-      peopleService.addData(nameObject).then((returnedData) => {
-        setFiltered(filtered.concat(returnedData))
-        setPersons(persons.concat(returnedData))
-        setNewName('')
-        setNewNumber('')
-        seterrorMessage({
-          text: `Added' ${nameObject.name}'`,
-          type: 'succesful',
+      peopleService
+        .addData(nameObject)
+        .then((returnedData) => {
+          setFiltered(filtered.concat(returnedData))
+          setPersons(persons.concat(returnedData))
+          setNewName('')
+          setNewNumber('')
+          seterrorMessage({
+            text: `Added' ${nameObject.name}'`,
+            type: 'succesful',
+          })
+          setTimeout(() => {
+            seterrorMessage(null)
+          }, 5000)
         })
-        setTimeout(() => {
-          seterrorMessage(null)
-        }, 5000)
-      })
+        .catch(
+          (error) =>
+            seterrorMessage({
+              text: `${error.response.data.error}`,
+              type: 'error',
+            }),
+          setTimeout(() => {
+            seterrorMessage(null)
+          }, 5000)
+        )
     }
   }
 
